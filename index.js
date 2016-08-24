@@ -1,5 +1,8 @@
 var express = require('express');
-var Busboy = require('busboy');
+var multer = require('multer');
+var upload = multer({
+  storage: multer.memoryStorage()
+});
 
 var app = express();
 
@@ -9,8 +12,8 @@ app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.post('/get-file-size', function(req, res) {
-  res.send(req.headers);
+app.post('/get-file-size', upload.single('file'), function(req, res) {
+  res.json({size: req.file.size});
 });
 
 app.listen(app.get('port'), function() {
